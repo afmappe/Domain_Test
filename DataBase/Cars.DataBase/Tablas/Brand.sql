@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[BRAND]
+(
+    [id] INT NOT NULL IDENTITY, 
+    [name] NVARCHAR(50) NOT NULL,
+
+    CONSTRAINT [PK_BRAND] PRIMARY KEY([id]),    
+    CONSTRAINT [UX_BRAND] UNIQUE ([name])
+)
