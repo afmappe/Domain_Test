@@ -1,4 +1,5 @@
-﻿using Cars.Library.Domain.Brands.Repositories;
+﻿using Cars.Library.Domain.Brands.Models;
+using Cars.Library.Domain.Brands.Repositories;
 using MediatR;
 using System;
 using System.Threading;
@@ -15,16 +16,20 @@ namespace Cars.Library.Domain.Brands.Commands
         {
             #region Dependencias
 
-            private readonly IBrandRepository BrandRepository;
+            private readonly IBrandQueryRepository _BrandQueryRepository;
+            private readonly IBrandRepository _BrandRepository;
 
             #endregion
 
             /// <summary>
             /// Constructor por defecto
             /// </summary>
-            public Handler(IBrandRepository brandRepository)
+            public Handler(
+                IBrandQueryRepository BrandQueryRepository,
+                IBrandRepository BrandRepository)
             {
-                BrandRepository = brandRepository;
+                _BrandQueryRepository = BrandQueryRepository;
+                _BrandRepository = BrandRepository;
             }
 
             /// <summary>
@@ -34,16 +39,16 @@ namespace Cars.Library.Domain.Brands.Commands
             {
                 int response = 0;
 
-                BrandInfo brand = await BrandRepository.GetByName(request.Name);
+                BrandModel model = await _BrandQueryRepository.GetByName(request.Name);
 
-                if (brand == null)
+                if (model == null)
                 {
-                    brand = new BrandInfo
+                    BrandInfo brand = new BrandInfo
                     {
                         Name = request.Name
                     };
 
-                    await BrandRepository.Create(brand);
+                    await _BrandRepository.Create(brand);
                     response = brand.Id;
                 }
                 else
@@ -55,9 +60,8 @@ namespace Cars.Library.Domain.Brands.Commands
             }
         }
 
-        public class Request : IRequest<int>
+        public class Request : BrandModel, IRequest<int>
         {
-            public string Name { get; set; }
         }
     }
 }

@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="CarsContainerExtension.cs" />
     <Compile Include="Domain\Brands\BrandInfo.cs" />
+    <Compile Include="Domain\Brands\Commands\GeBrandCommand.cs" />
     <Compile Include="Domain\Brands\Commands\DeleteBrandCommand.cs" />
     <Compile Include="Domain\Brands\Commands\CreateBrandCommand.cs" />
     <Compile Include="Domain\Brands\Models\BrandModel.cs" />
@@ -86,16 +87,21 @@
     <Compile Include="Domain\Cars\Repositories\ICarRepository.cs" />
     <Compile Include="Domain\Models\ModelInfo.cs" />
     <Compile Include="Extensions\IUnityContainerExtensions.cs" />
+    <Compile Include="Infrastructure\ApplicationInstance.cs" />
+    <Compile Include="Infrastructure\Common\Disposable.cs" />
     <Compile Include="Infrastructure\Data\Context\CarsContext.cs" />
     <Compile Include="Infrastructure\Data\Interfaces\IAsyncRepository.cs" />
+    <Compile Include="Domain\Brands\Repositories\IBrandQueryRepository.cs" />
     <Compile Include="Infrastructure\Data\Interfaces\IQueryRepository.cs" />
     <Compile Include="Infrastructure\Data\Mappers\BrandMapper.cs" />
     <Compile Include="Infrastructure\Data\Mappers\CarMapper.cs" />
     <Compile Include="Infrastructure\Data\Mappers\ModelMapper.cs" />
     <Compile Include="Infrastructure\Data\Repositories\AsyncRepositoryBase.cs" />
+    <Compile Include="Infrastructure\Data\Repositories\BrandQueryRepository.cs" />
     <Compile Include="Infrastructure\Data\Repositories\CarRepository.cs" />
     <Compile Include="Infrastructure\Data\Context\DbContextFactory.cs" />
     <Compile Include="Infrastructure\Data\Repositories\BrandRepository.cs" />
+    <Compile Include="Infrastructure\Data\Repositories\QueryRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

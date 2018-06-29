@@ -3,6 +3,10 @@ using System.Threading.Tasks;
 
 namespace Cars.Library.Infrastructure.Data.Interfaces
 {
+    /// <summary>
+    /// Define las operaciones de los repositorios
+    /// </summary>
+    /// <typeparam name="TEntityType">Entidad</typeparam>
     public interface IAsyncRepository<TEntityType>
         where TEntityType : class
     {
@@ -38,7 +42,7 @@ namespace Cars.Library.Infrastructure.Data.Interfaces
         /// </summary>
         /// <param name="keys"></param>
         /// <returns></returns>
-        Task Find(params object[] keys);
+        Task<TEntityType> Find(params object[] keys);
 
         /// <summary>
         /// Actualiza una entidad en el contexto

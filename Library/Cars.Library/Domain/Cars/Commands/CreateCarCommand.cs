@@ -1,6 +1,5 @@
 ﻿using Cars.Library.Domain.Cars.Repositories;
 using MediatR;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,13 +32,7 @@ namespace Cars.Library.Domain.Cars.Commands
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
                 Response result = null;
-                try
-                {
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+
                 return result;
             }
         }

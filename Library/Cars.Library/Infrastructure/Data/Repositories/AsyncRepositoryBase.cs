@@ -73,9 +73,20 @@ namespace Cars.Library.Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task Find(params object[] keys)
+        public async Task<TEntityType> Find(params object[] keys)
         {
-            throw new NotImplementedException();
+            TEntityType record = default(TEntityType);
+            try
+            {
+                using (TContextType context = CreateContext())
+                {
+                    record = await context.Set<TEntityType>().FindAsync(keys);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return record;
         }
 
         public Task Update(TEntityType record)
