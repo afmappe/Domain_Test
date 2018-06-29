@@ -15,12 +15,5 @@ namespace Cars.Library.Domain.Brands.Repositories
         /// <param name="id"></param>
         /// <returns></returns>
         Task<BrandModel> Get(int id);
-
-        /// <summary>
-        /// Retorna la información de la marca dado el nombre
-        /// </summary>
-        /// <param name="name">Nombre de la marca</param>
-        /// <returns>Información de la marca</returns>
-        Task<BrandModel> GetByName(string name);
     }
 }

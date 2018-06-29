@@ -10,7 +10,7 @@ namespace Cars.Library.Domain.Cars.Commands
         /// <summary>
         /// Implementación de <see cref="IRequestHandler{TRequest, TResponse}"/>
         /// </summary>
-        public class Handler : IRequestHandler<Request, Response>
+        public class Handler : IRequestHandler<Request, CarInfo>
         {
             #region Dependencias
 
@@ -29,16 +29,13 @@ namespace Cars.Library.Domain.Cars.Commands
             /// <summary>
             /// Implementación de <see cref="IRequestHandler{TRequest, TResponse}.Handle(TRequest, CancellationToken)"/>
             /// </summary>
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<CarInfo> Handle(Request request, CancellationToken cancellationToken)
             {
-                Response result = null;
-
-                return result;
+                CarRepository.Create(request);
+                return request;
             }
         }
 
-        public class Request : IRequest<Response> { }
-
-        public class Response { }
+        public class Request : CarInfo, IRequest<CarInfo> { }
     }
 }

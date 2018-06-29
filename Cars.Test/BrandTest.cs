@@ -1,6 +1,10 @@
 ﻿using Cars.Library.Domain.Brands.Commands;
+using Cars.Library.Domain.Cars.Commands;
+using Cars.Library.Infrastructure.Data;
+using Cars.Library.Infrastructure.Data.Interfaces;
 using MediatR;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Threading.Tasks;
 
 namespace Cars.Test
@@ -9,11 +13,18 @@ namespace Cars.Test
     public class BrandTest : TestBase
     {
         [TestMethod]
-        public void TestMethod1()
+        public async Task TestMethod1()
         {
             IMediator mediator = Resolve<IMediator>();
 
-            int a = Task.Run(() => mediator.Send(new CreateBrandCommand.Request { Name = "Hola Mundo" })).Result;
+            using (IUnitOfWork unitOfWork = Resolve<UnitOfWorkFactory>().Create())
+            {
+                int id = await mediator.Send(new CreateBrandCommand.Request { Name = string.Format("Marca{0}", Guid.NewGuid().ToString("n")) });
+
+                await mediator.Send(new CreateCarCommand.Request { ModelId = id });
+
+                unitOfWork.RejectChanges();
+            }
         }
     }
 }

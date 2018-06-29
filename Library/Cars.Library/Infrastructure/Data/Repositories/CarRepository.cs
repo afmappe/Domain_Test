@@ -1,7 +1,6 @@
 ﻿using Cars.Library.Domain.Cars;
 using Cars.Library.Domain.Cars.Repositories;
 using Cars.Library.Infrastructure.Data.Context;
-using System.Data.Entity.Infrastructure;
 
 namespace Cars.Library.Infrastructure.Data.Repositories
 {
@@ -14,9 +13,8 @@ namespace Cars.Library.Infrastructure.Data.Repositories
         /// <summary>
         /// Constructor por defecto
         /// </summary>
-        /// <param name="contextFactory"></param>
-        public CarRepository(IDbContextFactory<CarsContext> contextFactory)
-            : base(contextFactory)
+        public CarRepository(CarsContext context)
+            : base(context)
         { }
     }
 }

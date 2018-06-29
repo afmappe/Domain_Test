@@ -3,20 +3,19 @@ using Cars.Library.Domain.Brands.Repositories;
 using Cars.Library.Infrastructure.Data.Context;
 using System;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Cars.Library.Infrastructure.Data.Repositories
 {
-    internal class BrandQueryRepository : QueryRepository<CarsContext>,
+    internal class BrandQueryRepository : QueryRepositoryBase<CarsContext>,
         IBrandQueryRepository
     {
         /// <summary>
         /// Constructor por defecto
         /// </summary>
-        public BrandQueryRepository(IDbContextFactory<CarsContext> contextFactory)
-            : base(contextFactory)
+        protected BrandQueryRepository(CarsContext context)
+            : base(context)
         { }
 
         public static IQueryable<BrandModel> BrandModelQuery(CarsContext context)
@@ -37,32 +36,8 @@ namespace Cars.Library.Infrastructure.Data.Repositories
             BrandModel result = null;
             try
             {
-                using (CarsContext context = CreateContext())
-                {
-                    var query = BrandModelQuery(context).Where(x => x.Id == id);
-                    result = await query.SingleOrDefaultAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Implementación de <see cref="IBrandQueryRepository.GetByName(string)"/>
-        /// </summary>
-        public async Task<BrandModel> GetByName(string name)
-        {
-            BrandModel result;
-            try
-            {
-                using (CarsContext context = CreateContext())
-                {
-                    var query = BrandModelQuery(context).Where(x => x.Name == name);
-                    result = await query.SingleOrDefaultAsync();
-                }
+                var query = BrandModelQuery(context).Where(x => x.Id == id);
+                result = await query.SingleOrDefaultAsync();
             }
             catch (Exception ex)
             {

@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,14 +12,14 @@ namespace Cars.Library.Infrastructure.Data.Repositories
         where TEntityType : class
         where TContextType : DbContext
     {
-        private readonly IDbContextFactory<TContextType> ContextFactory;
+        protected readonly TContextType Context;
 
         /// <summary>
         /// Constructor por defecto
         /// </summary>
-        protected AsyncRepositoryBase(IDbContextFactory<TContextType> contextFactory)
+        protected AsyncRepositoryBase(TContextType context)
         {
-            ContextFactory = contextFactory;
+            this.Context = context;
         }
 
         /// <summary>
@@ -30,11 +29,7 @@ namespace Cars.Library.Infrastructure.Data.Repositories
         {
             try
             {
-                using (TContextType context = CreateContext())
-                {
-                    context.Entry(record).State = EntityState.Added;
-                    await context.SaveChangesAsync();
-                }
+                Context.Entry(record).State = EntityState.Added;
             }
             catch (Exception ex)
             {
@@ -48,14 +43,10 @@ namespace Cars.Library.Infrastructure.Data.Repositories
         {
             try
             {
-                using (TContextType context = CreateContext())
+                if (list != null && list.Any())
                 {
-                    if (list != null && list.Any())
-                    {
-                        context.Configuration.AutoDetectChangesEnabled = false;
-                        context.Set<TEntityType>().AddRange(list);
-                        await context.SaveChangesAsync();
-                    }
+                    Context.Configuration.AutoDetectChangesEnabled = false;
+                    Context.Set<TEntityType>().AddRange(list);
                 }
             }
             catch (Exception ex)
@@ -78,10 +69,7 @@ namespace Cars.Library.Infrastructure.Data.Repositories
             TEntityType record = default(TEntityType);
             try
             {
-                using (TContextType context = CreateContext())
-                {
-                    record = await context.Set<TEntityType>().FindAsync(keys);
-                }
+                record = await Context.Set<TEntityType>().FindAsync(keys);
             }
             catch (Exception ex)
             {
@@ -97,15 +85,6 @@ namespace Cars.Library.Infrastructure.Data.Repositories
         public Task Update(IEnumerable<TEntityType> list)
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Constructor del contexto
-        /// </summary>
-        /// <returns>Contexto</returns>
-        protected virtual TContextType CreateContext()
-        {
-            return ContextFactory.Create();
         }
     }
 }

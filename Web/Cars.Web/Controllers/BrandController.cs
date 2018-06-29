@@ -7,6 +7,9 @@ using System.Web.Http;
 
 namespace Cars.Web.Controllers
 {
+    /// <summary>
+    /// Marca
+    /// </summary>
     [RoutePrefix("api/hola")]
     public class BrandController : ApiController
     {
@@ -17,6 +20,11 @@ namespace Cars.Web.Controllers
             _Mediator = Mediator;
         }
 
+        /// <summary>
+        /// Crea una marca
+        /// </summary>
+        /// <param name="request">Solicitud</param>
+        /// <returns>Marca</returns>
         [HttpPost]
         [Route("")]
         public async Task<BrandModel> Create(CreateBrandCommand.Request request)
@@ -26,6 +34,10 @@ namespace Cars.Web.Controllers
             return request;
         }
 
+        /// <summary>
+        /// Obtiene el listado
+        /// </summary>
+        /// <returns>Listado</returns>
         [Route("")]
         public async Task<IEnumerable<BrandModel>> Get()
         {
@@ -33,6 +45,11 @@ namespace Cars.Web.Controllers
             return new BrandModel[] { model };
         }
 
+        /// <summary>
+        /// Hola
+        /// </summary>
+        /// <param name="id">Identificador</param>
+        /// <returns></returns>
         [Route("{id:int}")]
         public async Task<BrandModel> Get(int id)
         {

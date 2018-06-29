@@ -16,7 +16,6 @@ namespace Cars.Library.Domain.Brands.Commands
         {
             #region Dependencias
 
-            private readonly IBrandQueryRepository _BrandQueryRepository;
             private readonly IBrandRepository _BrandRepository;
 
             #endregion
@@ -24,11 +23,8 @@ namespace Cars.Library.Domain.Brands.Commands
             /// <summary>
             /// Constructor por defecto
             /// </summary>
-            public Handler(
-                IBrandQueryRepository BrandQueryRepository,
-                IBrandRepository BrandRepository)
+            public Handler(IBrandRepository BrandRepository)
             {
-                _BrandQueryRepository = BrandQueryRepository;
                 _BrandRepository = BrandRepository;
             }
 
@@ -39,7 +35,7 @@ namespace Cars.Library.Domain.Brands.Commands
             {
                 int response = 0;
 
-                BrandModel model = await _BrandQueryRepository.GetByName(request.Name);
+                BrandModel model = await _BrandRepository.GetByName(request.Name);
 
                 if (model == null)
                 {

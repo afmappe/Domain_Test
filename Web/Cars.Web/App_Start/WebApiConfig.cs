@@ -1,5 +1,7 @@
 ﻿using Cars.Web.App_Start;
+using Cars.Web.Areas.HelpPage;
 using System.Net.Http.Headers;
+using System.Web;
 using System.Web.Http;
 using Unity;
 
@@ -13,6 +15,8 @@ namespace Cars.Web
             config.MapHttpAttributeRoutes();
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
+
+            config.SetDocumentationProvider(new XmlDocumentationProvider(HttpContext.Current.Server.MapPath("~/App_Data/XmlDocument.xml")));
 
             DependecyInyection(config);
         }
