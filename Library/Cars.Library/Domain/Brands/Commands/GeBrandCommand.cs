@@ -1,6 +1,8 @@
 ﻿using Cars.Library.Domain.Brands.Models;
 using Cars.Library.Domain.Brands.Repositories;
+using Cars.Library.Exceptions;
 using MediatR;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,7 +37,15 @@ namespace Cars.Library.Domain.Brands.Commands
             /// </summary>
             public async Task<BrandModel> Handle(Request request, CancellationToken cancellationToken)
             {
-                BrandModel response = await BrandRepository.Get(request.Id);
+                BrandModel response = null;
+                try
+                {
+                    response = await BrandRepository.Get(request.Id);
+                }
+                catch (Exception ex)
+                {
+                    CommandExceptionHandler.Handle(ex, request);
+                }
                 return response;
             }
         }

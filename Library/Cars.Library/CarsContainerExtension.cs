@@ -1,5 +1,5 @@
-﻿using Cars.Library.Extensions;
-using Cars.Library.Infrastructure.Data;
+﻿using Cars.Library.Domain;
+using Cars.Library.Extensions;
 using Cars.Library.Infrastructure.Data.Context;
 using Cars.Library.Infrastructure.Data.Interfaces;
 using Unity;
@@ -13,14 +13,11 @@ namespace Cars.Library
     {
         protected override void Initialize()
         {
-            //Container
-            //   .RegisterType<IDbContextFactory<CarsContext>, DbContextFactory<CarsContext>>(new ContainerControlledLifetimeManager());
-
             Container.RegisterType<CarsContext>(new ContainerControlledLifetimeManager(),
                 new InjectionFactory(c => new DbContextFactory<CarsContext>().Create()));
 
-            Container.RegisterType<UnitOfWorkFactory>(new ContainerControlledLifetimeManager());
-            Container.RegisterType<IUnitOfWork, CarUnitOfWork>();
+            Container.RegisterType<ICarUnitOfWorkFactory, CarUnitOfWorkFactory>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<ICarUnitOfWork, CarUnitOfWork>(new TransientLifetimeManager());
 
             Container.RegisterMediator(new HierarchicalLifetimeManager())
              .RegisterGenericInterface(typeof(IAsyncRepository<>), () => new PerResolveLifetimeManager())

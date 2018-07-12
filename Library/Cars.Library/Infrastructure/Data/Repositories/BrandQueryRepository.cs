@@ -36,7 +36,7 @@ namespace Cars.Library.Infrastructure.Data.Repositories
             BrandModel result = null;
             try
             {
-                var query = BrandModelQuery(context).Where(x => x.Id == id);
+                var query = BrandModelQuery(Context).Where(x => x.Id == id);
                 result = await query.SingleOrDefaultAsync();
             }
             catch (Exception ex)

@@ -45,6 +45,12 @@ namespace Cars.Library.Infrastructure.Data.Interfaces
         Task<TEntityType> Find(params object[] keys);
 
         /// <summary>
+        /// Guarda los cambios realizados
+        /// </summary>
+        /// <returns>Tarea</returns>
+        Task Save();
+
+        /// <summary>
         /// Actualiza una entidad en el contexto
         /// </summary>
         /// <param name="record">Entidad a actualizar</param>

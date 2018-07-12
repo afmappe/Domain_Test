@@ -1,32 +1,38 @@
-﻿using Cars.Library.Domain.Brands.Models;
-using Cars.Library.Domain.Brands.Repositories;
+﻿// <copyright company="Aranda Software">
+// © Todos los derechos reservados
+// </copyright>
+
+using Cars.Library.Domain.Models.Models;
+using Cars.Library.Domain.Models.Repositories;
 using Cars.Library.Exceptions;
 using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Cars.Library.Domain.Brands.Commands
+namespace Cars.Library.Domain.Models.Commands
 {
-    public static class CreateBrandCommand
+    /// <summary>
+    ///
+    /// </summary>
+    public static class CreateCarModelCommand
     {
         /// <summary>
-        /// Implementación de <see cref="IRequestHandler{TRequest, TResponse}"/>
+        /// <see cref="IRequestHandler{TRequest, TResponse}"/>
         /// </summary>
         public class Handler : IRequestHandler<Request, int>
         {
-            #region Dependencias
-
-            private readonly IBrandRepository _BrandRepository;
-
-            #endregion
+            /// <summary>
+            /// <see cref="ICarModelRepository"/>
+            /// </summary>
+            private readonly ICarModelRepository _CarModelRepository;
 
             /// <summary>
             /// Constructor por defecto
             /// </summary>
-            public Handler(IBrandRepository BrandRepository)
+            public Handler(ICarModelRepository CarModelRepository)
             {
-                _BrandRepository = BrandRepository;
+                _CarModelRepository = CarModelRepository;
             }
 
             /// <summary>
@@ -38,18 +44,18 @@ namespace Cars.Library.Domain.Brands.Commands
 
                 try
                 {
-                    BrandModel model = await _BrandRepository.GetByName(request.Name);
+                    CarModelModel model = await _CarModelRepository.Get(request.BrandId, request.Name);
 
                     if (model == null)
                     {
-                        BrandInfo brand = new BrandInfo
+                        ModelInfo info = new ModelInfo
                         {
+                            BrandId = request.BrandId,
                             Name = request.Name
                         };
-
-                        await _BrandRepository.Create(brand);
-                        await _BrandRepository.Save();
-                        response = brand.Id;
+                        await _CarModelRepository.Create(info);
+                        await _CarModelRepository.Save();
+                        response = info.Id;
                     }
                     else
                     {
@@ -65,7 +71,10 @@ namespace Cars.Library.Domain.Brands.Commands
             }
         }
 
-        public class Request : BrandModel, IRequest<int>
+        /// <summary>
+        ///
+        /// </summary>
+        public class Request : CarModelModel, IRequest<int>
         {
         }
     }

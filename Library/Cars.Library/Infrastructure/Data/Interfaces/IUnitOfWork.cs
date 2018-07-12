@@ -11,10 +11,17 @@ namespace Cars.Library.Infrastructure.Data.Interfaces
         /// Hace commit de los cambios
         /// </summary>
         void Commit();
+    }
 
+    /// <summary>
+    ///
+    /// </summary>
+    public interface IUnitOfWorkFactory
+    {
         /// <summary>
-        /// Descarta todos los cambios sobre los que no se ha hecho commit
+        /// Crea las instancias de las unidades de trabajo
         /// </summary>
-        void RejectChanges();
+        /// <returns>UnitOfWork</returns>
+        IUnitOfWork Create();
     }
 }

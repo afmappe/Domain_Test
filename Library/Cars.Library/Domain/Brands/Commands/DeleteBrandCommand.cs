@@ -1,5 +1,7 @@
 ﻿using Cars.Library.Domain.Brands.Repositories;
+using Cars.Library.Exceptions;
 using MediatR;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,15 +33,22 @@ namespace Cars.Library.Domain.Brands.Commands
             /// </summary>
             public async Task<Unit> Handle(Request request, CancellationToken cancellationToken)
             {
-                if (request != null)
+                try
                 {
-                    BrandInfo brand = new BrandInfo
+                    if (request != null)
                     {
-                        Id = request.Id,
-                        Name = request.Name
-                    };
+                        BrandInfo brand = new BrandInfo
+                        {
+                            Id = request.Id,
+                            Name = request.Name
+                        };
 
-                    await BrandRepository.Delete(brand);
+                        await BrandRepository.Delete(brand);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    CommandExceptionHandler.Handle(ex, request);
                 }
                 return Unit.Value;
             }

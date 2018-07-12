@@ -1,8 +1,7 @@
 ﻿using Cars.Library.Infrastructure.Common;
 using Cars.Library.Infrastructure.Data.Interfaces;
+using System;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
 
 namespace Cars.Library.Infrastructure.Data
 {
@@ -14,41 +13,23 @@ namespace Cars.Library.Infrastructure.Data
         /// </summary>
         public UnitOfWork(TContextType context)
         {
-            Context = context;
+            Transaction = context.Database.BeginTransaction();
         }
 
-        /// <summary>
-        /// Contexto de EntityFramework
-        /// </summary>
-        protected TContextType Context { get; set; }
+        protected DbContextTransaction Transaction { get; set; }
 
         /// <summary>
         /// Implementación de <see cref="IUnitOfWork.Commit"/>
         /// </summary>
         public void Commit()
         {
-            Context.SaveChangesAsync();
-        }
-
-        /// <summary>
-        /// Implementación de <see cref="IUnitOfWork.Commit"/>
-        /// </summary>
-        public void RejectChanges()
-        {
-            foreach (DbEntityEntry entry in Context.ChangeTracker.Entries()
-                  .Where(e => e.State != EntityState.Unchanged))
+            try
             {
-                switch (entry.State)
-                {
-                    case EntityState.Added:
-                        entry.State = EntityState.Detached;
-                        break;
-
-                    case EntityState.Modified:
-                    case EntityState.Deleted:
-                        entry.Reload();
-                        break;
-                }
+                Transaction.Commit();
+            }
+            catch (Exception)
+            {
+                Transaction.Rollback();
             }
         }
 
@@ -57,7 +38,7 @@ namespace Cars.Library.Infrastructure.Data
         /// </summary>
         protected override void InternalDispose()
         {
-            Context.Dispose();
+            Transaction.Dispose();
         }
     }
 }

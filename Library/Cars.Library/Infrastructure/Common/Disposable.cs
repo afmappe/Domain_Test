@@ -4,26 +4,34 @@ namespace Cars.Library.Infrastructure.Common
 {
     public abstract class Disposable : IDisposable
     {
-        // Flag: Has Dispose already been called?
-        private bool disposed = false;
+        #region Implementation of IDisposable
 
-        protected Disposable()
-        {
-        }
+        /// <summary>
+        /// Detecta llamados redundantes
+        /// </summary>
+        private bool disposed = false;
 
         ~Disposable()
         {
+            // Termina y no ejecuta el dispose
             Dispose(false);
         }
 
-        // Public implementation of Dispose pattern callable by consumers.
+        /// <summary>
+        /// Implementación of <see cref="IDisposable.Dispose"/>
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        // Protected implementation of Dispose pattern.
+        #endregion
+
+        /// <summary>
+        /// Implementación protegida del patrón Dispose.
+        /// </summary>
+        /// <param name="disposing">Flag para el destructor de la clase</param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposed)
@@ -33,11 +41,13 @@ namespace Cars.Library.Infrastructure.Common
                     InternalDispose();
                 }
 
-                // Free any unmanaged objects here.
                 disposed = true;
             }
         }
 
+        /// <summary>
+        /// Se utiliza para agregar los objetos o instancias que se deben liberar cuando se llama el Dispose
+        /// </summary>
         protected abstract void InternalDispose();
     }
 }

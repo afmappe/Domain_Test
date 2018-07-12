@@ -64,6 +64,9 @@ namespace Cars.Library.Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Implementación de <see cref="IAsyncRepository{TEntityType}.Find(object[])"/>
+        /// </summary>
         public async Task<TEntityType> Find(params object[] keys)
         {
             TEntityType record = default(TEntityType);
@@ -77,14 +80,31 @@ namespace Cars.Library.Infrastructure.Data.Repositories
             return record;
         }
 
-        public Task Update(TEntityType record)
+        /// <summary>
+        /// Implementación de <see cref="IAsyncRepository{TEntityType}.Save"/>
+        /// </summary>
+        public Task Save()
         {
-            throw new NotImplementedException();
+            return Context.SaveChangesAsync();
         }
 
-        public Task Update(IEnumerable<TEntityType> list)
+        public async Task Update(TEntityType record)
         {
-            throw new NotImplementedException();
+            Context.Entry(record).State = EntityState.Modified;
+        }
+
+        public async Task Update(IEnumerable<TEntityType> list)
+        {
+            if (list != null && list.Any())
+            {
+                Context.Configuration.AutoDetectChangesEnabled = false;
+
+                foreach (TEntityType record in list)
+                {
+                    Context.Entry(record).State = EntityState.Modified;
+                }
+                Context.ChangeTracker.DetectChanges();
+            }
         }
     }
 }
